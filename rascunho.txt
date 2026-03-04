@@ -1,4 +1,5 @@
 
+
 rascunho
 
 
@@ -98,3 +99,10 @@ ________________________________________________________________________________
 # KERNEL=6.19.6 sh -x nvidia-kernel.SlackBuild
 
 # installpkg /tmp/nvidia-kernel-580.126.18_6.19.6-x86_64-1_SBo.tgz
+
+
+Referências:
+
+https://mirrors.slackware.com/slackware/slackware64-current/testing/source/linux-6.18.x/
+https://github.com/CachyOS/linux-cachyos
+https://github.com/CachyOS/kernel-patches
