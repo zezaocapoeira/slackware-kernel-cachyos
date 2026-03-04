@@ -82,7 +82,18 @@ ________________________________________________________________________________
 
 # config-kernel-update.sh
 
-(/usr/local/bin)
+---------
+OBS:
+
+(/usr/local/bin) local onde coloquei o config-kernel-update.sh
+
+para gerar o initrd compatível
+
+/usr/share/mkinitrd/mkinitrd_command_generator.sh -k 6.19.6
+
+após gerar faça os ajuste no arquivo "config-kernel-update.sh"
+
+-----------
 
 __________________________________________________________________________________
 
