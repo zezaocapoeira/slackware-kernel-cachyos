@@ -1,0 +1,100 @@
+
+rascunho
+
+
+adapte os passos abaixo para sua realidade.
+
+
+
+# tar -xvf linux-6.19.6.tar.xz -C /usr/src
+
+# cd /usr/src
+
+# rm -rf linux-6.19.4 linux
+
+# ln -sf linux-6.19.6 linux
+
+# cd linux
+
+
+# patch -Np1 < /home/zezao-slack/BUILD-patch/6.19/0001-cachyos-base-all.patch
+
+# patch -Np1 < /home/zezao-slack/BUILD-patch/6.19/0001-bore-cachy.patch
+
+# patch -Np1 < /home/zezao-slack/BUILD-patch/6.19/dkms-clang.patch
+
+______________________________________________________________________________________
+
+# mkdir -p /tmp/kernel-headers/usr
+
+# make INSTALL_HDR_PATH=/tmp/kernel-headers/usr headers_install
+
+# find /tmp/kernel-headers/usr/include/ \( -name .install -o -name ..install.cmd \) -delete
+
+# cd /tmp/kernel-headers
+
+# makepkg -l y -c n ../kernel-headers-6.19.6.txz
+
+# removepkg kernel-headers-6.19.5
+
+# installpkg /tmp/kernel-headers-6.19.6.txz
+
+# cd /usr/src/linux
+
+# make clean
+
+____________________________________________________________________________________
+
+
+# cd /usr/src/linux
+
+# cp /home/zezao-slack/BUILD-patch/6.19/config /usr/src/linux/.config
+
+# make CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1 oldconfig
+
+# make CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1 menuconfig
+
+# sh -x /home/zezao-slack/BUILD-patch/6.19/kernel-cachyos.sh
+
+# make CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1 menuconfig
+
+# time make all CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1 -j14 -l14 2>&1 | tee /tmp/kernel-build.log
+
+# make modules_install INSTALL_MOD_STRIP=1
+
+___________________________________________________________________________________
+
+
+# removepkg nvidia-kernel-580.126.18_6.19.4-x86_64-1_SBo
+
+__________________________________________________________________________________
+
+
+# rm -rf /lib/modules/6.19.4
+
+# rm -rf /boot/*6.19.4*
+
+__________________________________________________________________________________
+
+
+# export versao=6.19.6
+
+# config-kernel-update.sh
+
+(/usr/local/bin)
+
+__________________________________________________________________________________
+
+
+# sh -x /home/zezao-slack/BUILD-patch/6.19/clean-debug.sh
+
+(https://linorg.usp.br/slackware/slackware64-current/source/k/kernel-source.SlackBuild)
+__________________________________________________________________________________
+
+
+
+# cd ~/BUILD/NVIDIA/slack-nvidia/nvidia-kernel
+
+# KERNEL=6.19.6 sh -x nvidia-kernel.SlackBuild
+
+# installpkg /tmp/nvidia-kernel-580.126.18_6.19.6-x86_64-1_SBo.tgz
