@@ -1,0 +1,128 @@
+
+rascunho
+________________________________________________________________________________
+https://cachyos.org/blog/2603-march-release/
+
+...
+On the kernel side, linux-cachyos now publishes tagged releases in a dedicated Linux repository,
+replacing the previous single-patch (0001-cachyos-base-all.patch)
+...
+
+________________________________________________________________________________
+
+https://github.com/CachyOS/linux/releases/
+
+https://github.com/CachyOS/linux/releases/download/cachyos-6.19.12-2/cachyos-6.19.12-2.tar.gz
+
+
+
+adapte os passos abaixo para sua realidade.
+
+
+
+# tar -xvf cachyos-6.19.12-2.tar.gz -C /usr/src/
+
+# mv cachyos-6.19.12-2 linux-6.12.12
+
+# cd /usr/src
+
+# rm ./tag-release.sh
+
+# rm -rf linux-6.19.11 linux
+
+# ln -sf linux-6.19.12 linux
+
+# cd linux
+
+
+
+# patch -Np1 < /home/zezao-slack/BUILD-patch/6.19/0001-bore-cachy.patch
+
+# patch -Np1 < /home/zezao-slack/BUILD-patch/6.19/dkms-clang.patch
+
+______________________________________________________________________________________
+
+# mkdir -p /tmp/kernel-headers/usr
+
+# make INSTALL_HDR_PATH=/tmp/kernel-headers/usr headers_install
+
+# find /tmp/kernel-headers/usr/include/ \( -name .install -o -name ..install.cmd \) -delete
+
+# cd /tmp/kernel-headers
+
+# makepkg -l y -c n ../kernel-headers-6.19.12.txz
+
+# removepkg kernel-headers-6.19.11
+
+# installpkg /tmp/kernel-headers-6.19.12.txz
+
+# cd /usr/src/linux
+
+# make clean
+
+____________________________________________________________________________________
+
+
+# cd /usr/src/linux
+
+# cp /home/zezao-slack/BUILD-patch/6.19/config /usr/src/linux/.config
+
+# make CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1 oldconfig
+
+# make CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1 menuconfig
+
+# sh -x /home/zezao-slack/BUILD-patch/6.19/kernel-cachyos.sh
+
+# make CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1 menuconfig
+
+# time make all CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1 -j14 -l14 2>&1 | tee /tmp/kernel-build.log
+
+# make modules_install INSTALL_MOD_STRIP=1
+
+___________________________________________________________________________________
+
+
+
+# rm -rf /lib/modules/6.19.11
+
+# rm -rf /boot/*6.19.11*
+
+__________________________________________________________________________________
+
+
+# export versao=6.19.12
+
+# config-kernel-update.sh
+
+---------
+OBS:
+
+(/usr/local/bin) local onde coloquei o config-kernel-update.sh
+
+para gerar o initrd compatível
+
+/usr/share/mkinitrd/mkinitrd_command_generator.sh -k 6.19.12
+
+após gerar faça os ajuste no arquivo "config-kernel-update.sh"
+
+-----------
+
+__________________________________________________________________________________
+
+
+# sh -x /home/zezao-slack/BUILD-patch/6.19.12/clean-debug.sh
+
+(https://linorg.usp.br/slackware/slackware64-current/source/k/kernel-source.SlackBuild)
+__________________________________________________________________________________
+
+
+Referências:
+
+
+https://mirrors.slackware.com/slackware/slackware64-current/testing/source/linux-6.18.x/
+
+https://github.com/CachyOS/linux/releases/
+https://github.com/CachyOS/linux-cachyos
+https://github.com/CachyOS/kernel-patches
+
+https://cachyos.org/blog/2603-march-release/
